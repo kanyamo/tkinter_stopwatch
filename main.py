@@ -51,13 +51,17 @@ class StopWatchApp:
     def increment_time(self):
         if self.timer_running:
             self.time = time.time() - self.start_time
-            self.label.config(text=f'{self.time:.2f}')
+            if self.time >  5:
+                self.label.config(text="")
+            else:
+                self.label.config(text=f'{self.time:.2f}')
             # after 10 milliseconds, call this method again
             self.root.after(10, self.increment_time)
 
     def check_result(self):
         diff = abs(10 - self.time)
         result_text = get_result_text(diff)
+        self.label.config(text=f'{self.time:.2f}')
         self.result_label.config(text=result_text)
 
 
