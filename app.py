@@ -53,6 +53,26 @@ class StopWatchApp:
         self.result_label = tk.Label(root, text='', font=('Helvetica', 16))
         self.result_label.pack()
 
+        # best several high scores
+        self.high_score_table = tk.Frame(root)
+        self.high_score_table.pack()
+
+        for i, high_score in enumerate(self.high_score_manager.high_scores):
+            for j, (key, value) in enumerate(high_score.to_dict().items()):
+                if i == 0:
+                    header = tk.Label(
+                        self.high_score_table,
+                        text=key,
+                        font=('Helvetica', 16),
+                    )
+                    header.grid(row=0, column=j)
+                cell = tk.Label(
+                    self.high_score_table,
+                    text=value,
+                    font=('Helvetica', 16),
+                )
+                cell.grid(row=i + 1, column=j)
+
     def start_or_stop_timer(self):
         if not self.timer_running:  # if timer is not running, then start the timer
             self.start_timer()
