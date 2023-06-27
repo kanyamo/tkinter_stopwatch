@@ -1,24 +1,36 @@
 import tkinter as tk
 import time
 from utils import get_result_text
+from constants import *
+import random
 
 
 class StopWatchApp:
-    def __init__(self, root):
+    def __init__(self, root: tk.Tk):
         self.root = root
+        self.root.title(AppText.TITLE)
+        self.root.geometry('400x600')
+
         self.time = 0
         self.start_time = 0
         self.timer_running = False
+        # time that player should stop the timer
+        self.target_time = 5 * random.randint(2, 6)
+        self.hide_time = self.target_time * 0.2 + 3
 
-        self.label = tk.Label(root, text='0.00', font=('Helvetica', 24))
-        self.label.pack()
+        self.target_time_label = tk.Label(
+            root, text=f'STOP at {self.target_time:.2f} !', font=('Helvetica', 16))
+        self.target_time_label.pack()
+
+        self.timer_label = tk.Label(root, text='0.00', font=('Helvetica', 24))
+        self.timer_label.pack()
 
         self.start_stop_button = tk.Button(
-            root, text='Start', command=self.start_or_stop_timer)
+            root, text=AppText.START, command=self.start_or_stop_timer)
         self.start_stop_button.pack()
 
         self.reset_button = tk.Button(
-            root, text='Reset', command=self.reset_timer)
+            root, text=AppText.RESET, command=self.reset_timer)
         self.reset_button.pack()
 
         # New label for displaying the result
@@ -35,33 +47,38 @@ class StopWatchApp:
         self.timer_running = True
         self.start_time = time.time()
         self.increment_time()
-        self.start_stop_button.config(text='Stop')
+        self.start_stop_button.config(text=AppText.STOP)
         # Clear the result label when starting the timer
         self.result_label.config(text='')
 
     def stop_timer(self):
         self.timer_running = False
         self.check_result()
-        self.start_stop_button.config(text='Start')
+        self.start_stop_button.config(text=AppText.START)
 
     def reset_timer(self):
         self.time = 0
-        self.label.config(text='0.00')
+        self.timer_label.config(text='0.00')
+        self.target_time = 5 * random.randint(2, 6)
+        self.hide_time = self.target_time * 0.2 + 3
+        self.target_time_label.config(
+            text=f'STOP at {self.target_time:.2f} !')
+        self.result_label.config(text='')
 
     def increment_time(self):
         if self.timer_running:
             self.time = time.time() - self.start_time
-            if self.time >  5:
-                self.label.config(text="")
+            if self.time > self.hide_time:
+                self.timer_label.config(text="")
             else:
-                self.label.config(text=f'{self.time:.2f}')
+                self.timer_label.config(text=f'{self.time:.2f}')
             # after 10 milliseconds, call this method again
             self.root.after(10, self.increment_time)
 
     def check_result(self):
-        diff = abs(10 - self.time)
+        diff = abs(self.target_time - self.time)
         result_text = get_result_text(diff)
-        self.label.config(text=f'{self.time:.2f}')
+        self.timer_label.config(text=f'{self.time:.2f}')
         self.result_label.config(text=result_text)
 
 
