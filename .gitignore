@@ -1,5 +1,5 @@
-# Python chache
-__pychache__
+# Python cache
+__pycache__
 
 # data
-data/high_score.json
+data/high_scores.json
