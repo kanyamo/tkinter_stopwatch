@@ -2,7 +2,7 @@ import json
 from constants import HIGH_SCORE_FILENAME
 
 
-class HighScoreManager():
+class HighScoreManager:
     MAX_HIGH_SCORES = 5
     FILENAME = HIGH_SCORE_FILENAME
 
