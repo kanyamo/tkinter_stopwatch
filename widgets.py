@@ -10,8 +10,22 @@ class CustomLabel(tk.Label):
     """
 
     def __init__(self, master, *args, **kwargs):
+        kwargs.setdefault('bg', AppColors.BG)
+        kwargs.setdefault('fg', AppColors.TEXT)
         super().__init__(master, *args, **kwargs)
-        if not kwargs.get('bg'):
-            self.configure(bg=AppColors.BG)
-        if not kwargs.get('fg'):
-            self.configure(fg=AppColors.TEXT)
+
+
+class CustomButton(tk.Button):
+    """
+    Custom button widget
+    """
+
+    def __init__(self, master, *args, **kwargs):
+        kwargs.setdefault('bg', AppColors.PRIMARY)
+        kwargs.setdefault('fg', AppColors.TEXT)
+        kwargs.setdefault('activebackground', AppColors.SECONDARY)
+        kwargs.setdefault('activeforeground', AppColors.TEXT)
+        kwargs.setdefault('borderwidth', 0)
+        kwargs.setdefault('width', 10)
+        kwargs.setdefault('height', 2)
+        super().__init__(master, *args, **kwargs)
