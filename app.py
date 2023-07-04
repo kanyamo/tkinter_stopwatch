@@ -1,6 +1,6 @@
 import tkinter as tk
 import time
-from utils import get_result_text
+from utils import get_result_text,get_light_text
 from constants import AppText
 import random
 from high_score import HighScoreManager, HighScore
@@ -19,7 +19,6 @@ class StopWatchApp:
         self.timer_running = False
         # time that player should stop the timer
         self.target_time = 5 * random.randint(2, 6)
-        self.hide_time = self.target_time * 0.2 + 3
 
         # load high score
         self.high_score_manager = HighScoreManager()
@@ -105,17 +104,14 @@ class StopWatchApp:
         # main loop function of the timer
         if self.timer_running:
             self.time = time.time() - self.start_time
-            if self.time > self.hide_time:
-                self.timer_label.config(text="")
-            else:
-                self.timer_label.config(text=f'{self.time:.2f}')
+            self.timer_label.config(text=f'{self.time:.2f}',fg=get_light_text(self.time,self.target_time))
             # after 10 milliseconds, call this method again
             self.root.after(10, self.increment_time)
 
     def check_result(self):
         diff = abs(self.target_time - self.time)
         result_text = get_result_text(diff)
-        self.timer_label.config(text=f'{self.time:.2f}')
+        self.timer_label.config(text=f'{self.time:.2f}',fg='#000')
         self.result_label.config(text=result_text)
 
         # update high score
