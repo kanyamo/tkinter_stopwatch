@@ -1,10 +1,11 @@
 import tkinter as tk
 import time
 from utils import get_result_text, get_light_text
-from constants import AppText, AppColors, AppSize
+from constants import AppText, AppColors, AppSize, ASSET_DIR
 import random
 from high_score import HighScoreManager, HighScore
 from widgets import CustomLabel, CustomButton
+from pygame import mixer
 
 
 class StopWatchApp:
@@ -25,6 +26,11 @@ class StopWatchApp:
         self.timer_running = False
         # time that player should stop the timer
         self.target_time = 5 * random.randint(2, 6)
+
+        # load sound
+        mixer.init()
+        self.click_sound = mixer.Sound(ASSET_DIR / "se" / "click.wav")
+        self.reset_sound = mixer.Sound(ASSET_DIR / "se" / "reset.wav")
 
         # load high score
         self.high_score_manager = HighScoreManager()
@@ -51,8 +57,8 @@ class StopWatchApp:
         self.start_stop_button = CustomButton(
             self.button_container,
             text=AppText.START,
-            command=self.start_or_stop_timer,
         )
+        self.start_stop_button.bind('<Button-1>', self.start_or_stop_timer)
         self.start_stop_button.grid(row=0, column=0, padx=10, pady=10)
 
         self.reset_button = CustomButton(
@@ -93,11 +99,13 @@ class StopWatchApp:
                 )
                 cell.grid(row=i + 1, column=j)
 
-    def start_or_stop_timer(self):
+    def start_or_stop_timer(self, _):
         if not self.timer_running:  # if timer is not running, then start the timer
             self.start_timer()
         else:  # if timer is already running, then stop the timer
             self.stop_timer()
+        # sound effect
+        self.click_sound.play()
 
     def start_timer(self):
         self.timer_running = True
@@ -123,6 +131,7 @@ class StopWatchApp:
         self.target_time_label.config(
             text=f'STOP at {self.target_time:.2f} !')
         self.result_label.config(text='')
+        self.reset_sound.play()
 
     def increment_time(self):
         # main loop function of the timer

@@ -2,11 +2,14 @@
 
 ## install
 
-Currently, this application has no dependencies other than the standard library.
+this project uses PyGame, so you need to install it first.
 
 ```
 git clone https://github.com/kanyamo/tkinter_stopwatch.git
 cd tkinter_stopwatch
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
 ```
 
 ## run
