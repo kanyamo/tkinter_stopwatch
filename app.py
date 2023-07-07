@@ -1,11 +1,24 @@
 import tkinter as tk
+from tkinter import messagebox
 import time
 from utils import get_result_text, get_light_text
 from constants import AppText, AppColors, AppSize, ASSET_DIR
 import random
 from high_score import HighScoreManager, HighScore
 from widgets import CustomLabel, CustomButton
-from pygame import mixer
+try:
+    from pygame import mixer
+except ImportError:
+    answer = messagebox.askyesno(
+        "Import Error",
+        "Pygame is not installed. Do you want to install it now?"
+    )
+    if answer:
+        import os
+        os.system('pip install -r requirements.txt')
+        from pygame import mixer
+    else:
+        exit()
 
 
 class StopWatchApp:
@@ -25,7 +38,7 @@ class StopWatchApp:
         self.start_time = 0
         self.timer_running = False
         # time that player should stop the timer
-        self.target_time = 5 * random.randint(2, 6)
+        self.target_time = 2 * random.randint(5, 10)
 
         # load sound
         mixer.init()
@@ -127,7 +140,7 @@ class StopWatchApp:
     def reset_timer(self):
         self.time = 0
         self.timer_label.config(text='0.00')
-        self.target_time = 5 * random.randint(2, 6)
+        self.target_time = 2 * random.randint(5, 10)
         self.target_time_label.config(
             text=f'STOP at {self.target_time:.2f} !')
         self.result_label.config(text='')

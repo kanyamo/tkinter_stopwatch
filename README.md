@@ -2,13 +2,26 @@
 
 ## install
 
-this project uses PyGame, so you need to install it first.
-
 ```
 git clone https://github.com/kanyamo/tkinter_stopwatch.git
 cd tkinter_stopwatch
+```
+
+this project uses PyGame, so you need to install it first especially you want to use virtual environment.
+
+e.g. on Windows
+
+```
 python -m venv .venv
 .venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+on Linux, MacOS
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -18,6 +31,8 @@ pip install -r requirements.txt
 python main.py
 ```
 
+- This won't produce any errors even if you didn't install PyGame. But you can't play the game.
+- If you didn't install PyGame and press yes on the message box, it will install PyGame automatically.
 
 # Abstract
 This is a game to stop the timer perfectly at a certain fixed time. Specifically, the game will be created using the python tkinter module.
