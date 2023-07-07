@@ -32,5 +32,7 @@ RESULT_TEXT_THRESHOLDS = [
     (1.0, "Keep practicing!"),
 ]
 
-DATA_DIR = Path(__file__).parent / "data"
+BASE_DIR = Path(__file__).parent
+DATA_DIR = BASE_DIR / "data"
+ASSET_DIR = BASE_DIR / "assets"
 HIGH_SCORE_FILENAME = DATA_DIR / "high_scores.json"

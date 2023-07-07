@@ -1,5 +1,8 @@
 # Python cache
 __pycache__
 
+# Python env
+.venv
+
 # data
 data/high_scores.json
