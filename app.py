@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
 import time
-from utils import get_result_text, get_light_text
+from utils import get_result_index, get_light_text, get_result_text
 from constants import AppText, AppColors, AppSize, ASSET_DIR
 import random
 from high_score import HighScoreManager, HighScore
@@ -42,8 +42,18 @@ class StopWatchApp:
 
         # load sound
         mixer.init()
+        self.start_sound = mixer.Sound(ASSET_DIR / "se" / "perfect.wav")
         self.click_sound = mixer.Sound(ASSET_DIR / "se" / "click.wav")
-        self.reset_sound = mixer.Sound(ASSET_DIR / "se" / "reset.wav")
+        self.running_sound = mixer.Sound(ASSET_DIR / "se" / "running.wav")
+        self.running_sound.set_volume(0.5)
+        self.result_sounds = [
+            mixer.Sound(ASSET_DIR / "se" / "perfect.wav"),
+            mixer.Sound(ASSET_DIR / "se" / "great.wav"),
+            mixer.Sound(ASSET_DIR / "se" / "good.wav"),
+            mixer.Sound(ASSET_DIR / "se" / "bad.wav"),
+            mixer.Sound(ASSET_DIR / "se" / "bad.wav"),
+            self.click_sound,
+        ]
 
         # load high score
         self.high_score_manager = HighScoreManager()
@@ -61,7 +71,7 @@ class StopWatchApp:
         self.target_time_label.pack()
 
         self.timer_label = CustomLabel(
-            self.timer_container, text='0.00', font=('Helvetica', 24))
+            self.timer_container, text='0.00', font=('Helvetica', 36))
         self.timer_label.pack()
 
         self.button_container = tk.Frame(self.timer_container, bg=AppColors.BG)
@@ -117,8 +127,6 @@ class StopWatchApp:
             self.start_timer()
         else:  # if timer is already running, then stop the timer
             self.stop_timer()
-        # sound effect
-        self.click_sound.play()
 
     def start_timer(self):
         self.timer_running = True
@@ -129,6 +137,8 @@ class StopWatchApp:
         self.result_label.config(text='')
         # disable the reset button when timer is running
         self.reset_button.config(state=tk.DISABLED, bg=AppColors.DISABLED)
+        self.start_sound.play()
+        self.running_sound.play(-1)
 
     def stop_timer(self):
         self.timer_running = False
@@ -136,6 +146,7 @@ class StopWatchApp:
         self.start_stop_button.config(text=AppText.START)
         # enable the reset button when timer is stopped
         self.reset_button.config(state=tk.NORMAL, bg=AppColors.ACCENT)
+        self.running_sound.stop()
 
     def reset_timer(self):
         self.time = 0
@@ -144,7 +155,7 @@ class StopWatchApp:
         self.target_time_label.config(
             text=f'STOP at {self.target_time:.2f} !')
         self.result_label.config(text='')
-        self.reset_sound.play()
+        self.click_sound.play()
 
     def increment_time(self):
         # main loop function of the timer
@@ -157,9 +168,11 @@ class StopWatchApp:
 
     def check_result(self):
         diff = abs(self.target_time - self.time)
+        index = get_result_index(diff)
         result_text = get_result_text(diff)
         self.timer_label.config(text=f'{self.time:.2f}', fg='#000')
         self.result_label.config(text=result_text)
+        self.result_sounds[index].play()
 
         # update high score
         self.high_score_manager.update(

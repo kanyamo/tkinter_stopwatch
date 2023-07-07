@@ -17,6 +17,13 @@ class AppText:
     START = "START"
     STOP = "STOP"
     RESET = "RESET"
+    RESULTS = [
+        "Perfect!",
+        "Great!",
+        "Good!",
+        "Not bad!",
+        "Keep practicing!",
+    ]
 
 
 class AppSize:
@@ -24,12 +31,12 @@ class AppSize:
     HEIGHT = 600
 
 
-RESULT_TEXT_THRESHOLDS = [
-    (0.02, "Perfect!"),
-    (0.1, "Great!"),
-    (0.2, "Good!"),
-    (0.5, "Not bad!"),
-    (1.0, "Keep practicing!"),
+RESULT_THRESHOLDS = [
+    0.02,
+    0.1,
+    0.2,
+    0.5,
+    1.0,
 ]
 
 BASE_DIR = Path(__file__).parent
